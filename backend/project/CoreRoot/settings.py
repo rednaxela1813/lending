@@ -27,7 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')    
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
 
@@ -41,6 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #rest framework
+    'rest_framework',
+
+    # Local apps
+    'core',
+    'core.user',
 ]
 
 MIDDLEWARE = [
@@ -124,9 +132,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = 'core_user.User'
+
+# Важно: STATIC_ROOT должен быть внутри контейнера!
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Добавляем в STATICFILES_DIRS (если используем дополнительные файлы)
+
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'core/staticfiles')
+else:
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'core/static')
+    ]

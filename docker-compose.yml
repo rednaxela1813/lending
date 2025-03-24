@@ -1,15 +1,15 @@
-
-
 services:
   backend:
     build:
-      context: ./backend/project
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/project/Dockerfile
     container_name: django_backend
     env_file:
       - ./backend/project/.env
     volumes:
-      - ./backend/project:/app
+      - static_volume:/app/static
+
+        
     ports:
       - "8000:8000"
     depends_on:
@@ -28,4 +28,4 @@ services:
 
 volumes:
   pg_data:
-
+  static_volume:  # Добавляем volume для статики

@@ -1,20 +1,17 @@
-# Используем официальный Python-образ
 FROM python:3.12
 
-# Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
-# Устанавливаем зависимости
-COPY requirements.txt .
+COPY backend/project/requirements.txt .
+
+# Устанавливаем netcat
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем код проекта в контейнер
-COPY . .
+COPY backend/project/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-# Открываем порт (если нужно)
-EXPOSE 8000
+COPY backend/project /app/
 
-# Запускаем сервер Django
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "CoreRoot.wsgi:application"]
-
-
+CMD ["/app/entrypoint.sh"]
