@@ -45,13 +45,27 @@ INSTALLED_APPS = [
 
     #rest framework
     'rest_framework',
+    "corsheaders",
 
     # Local apps
     'core',
     'core.user',
+    'core.auth',
+    'core.counterparties',
+    'core.post',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
+
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -153,3 +167,8 @@ else:
     STATICFILES_DIRS = [
         os.path.join(BASE_DIR, 'core/static')
     ]
+
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]

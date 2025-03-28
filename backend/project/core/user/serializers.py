@@ -1,18 +1,12 @@
-from rest_framework import serializers
+from core.abstract.serializers import AbstractSerializer
 from core.user.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True, source='public_id', format='hex')
-    created = serializers.DateTimeField(read_only=True)
-    updated = serializers.DateTimeField(read_only=True)
-
+class UserSerializer(AbstractSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'created', 'updated', 'bio', 'avatar', 'is_active')
-        read_only_fields = ['is_active']
-
-
-
-    
-                            
+        # List of all the fields that can be included in a request or a response
+        fields = ['id', 'username', 'first_name', 'last_name', 'bio', 'avatar', 'email', 'is_active',
+                  'created', 'updated']
+        # List of all the fields that can only be read by the user
+        read_only_field = ['is_active']
